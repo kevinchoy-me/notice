@@ -4,7 +4,9 @@ import { Component } from '@angular/core';
   selector: 'app-home',
   template: `
     <main class="min-h-screen flex items-center justify-center">
-      <h1 class="text-2xl font-light tracking-wide">Occura</h1>
+      <div class="card">
+        <h1 class="text-2xl font-light tracking-wide text-accent">Occura</h1>
+      </div>
     </main>
   `,
 })
