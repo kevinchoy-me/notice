@@ -3,6 +3,7 @@
   "name": "notice",
   "compatibility_date": "2026-10-28",
   "assets": {
-    "directory": "./dist/occura/browser"
+    "directory": "./dist/occura/browser",
+    "html_handling": "drop-trailing-slash"
   }
 }

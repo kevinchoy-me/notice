@@ -1,1 +1,23 @@
-<router-outlet />
+<div class="mx-auto flex min-h-screen max-w-2xl flex-col px-6 py-12">
+  <header class="space-y-1">
+    <p class="text-2xl font-light tracking-wide text-accent">Occura</p>
+    <p class="text-sm text-ink-muted">Quiet awareness for recurring money</p>
+  </header>
+
+  <nav class="mt-8 flex gap-6 text-sm" aria-label="Main">
+    @for (link of links; track link.path) {
+      <a
+        [routerLink]="link.path"
+        routerLinkActive
+        [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
+        class="text-ink-muted transition-colors hover:text-ink aria-[current=page]:text-accent"
+        >{{ link.label }}</a
+      >
+    }
+  </nav>
+
+  <main class="mt-12 flex-1">
+    <router-outlet />
+  </main>
+</div>
