@@ -1,0 +1,42 @@
+<section class="card">
+  <h1 class="text-xl font-light">This week's awareness</h1>
+
+  @if (awareness(); as a) {
+    @if (a.count === 0) {
+      <p class="mt-4 text-ink-muted">
+        Nothing to notice yet. Once you add a subscription, a quiet view of the week ahead will gather here.
+      </p>
+    } @else {
+      @if (a.upcoming.length) {
+        <p class="mt-4">
+          {{ a.upcoming.length }} {{ a.upcoming.length === 1 ? 'subscription renews' : 'subscriptions renew' }}
+          in the next 7 days.
+        </p>
+        <ul class="mt-4 space-y-2">
+          @for (sub of a.upcoming; track sub.id) {
+            <li class="flex items-baseline justify-between gap-4 text-sm">
+              <span>{{ sub.name }}</span>
+              <span class="whitespace-nowrap text-ink-muted">
+                {{ sub.nextRenewal | date: 'EEE d MMM' }} · {{ sub.amount | number: '1.2-2' }}
+              </span>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="mt-4">Nothing renews in the next 7 days.</p>
+      }
+
+      <p class="mt-6 text-sm text-ink-muted">
+        Across {{ a.count }} {{ a.count === 1 ? 'subscription' : 'subscriptions' }}, that's about
+        <span class="text-ink">{{ a.monthlyTotal | number: '1.2-2' }}</span> a month.
+      </p>
+    }
+  }
+
+  <a
+    routerLink="/subscriptions"
+    class="mt-6 inline-block text-sm text-accent underline decoration-accent/30 underline-offset-4 transition-colors hover:decoration-accent"
+  >
+    {{ awareness()?.count === 0 ? 'Add your first subscription' : 'View subscriptions' }}
+  </a>
+</section>
