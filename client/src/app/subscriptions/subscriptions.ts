@@ -9,17 +9,19 @@ import { Subscription, db } from '../core/db';
   templateUrl: './subscriptions.html',
 })
 export class Subscriptions {
+  private readonly fb = inject(NonNullableFormBuilder);
+
   protected readonly subscriptions = signal<Subscription[]>([]);
   protected readonly loaded = signal(false);
   protected readonly saving = signal(false);
   protected readonly saveFailed = signal(false);
 
-  protected readonly form = inject(NonNullableFormBuilder).group({
-    name: ['', Validators.required],
-    amount: [null as number | null, [Validators.required, Validators.min(0)]],
-    cycle: ['monthly' as Subscription['cycle'], Validators.required],
-    nextRenewal: ['', Validators.required],
-  });
+  protected readonly editingId = signal<number | null>(null);
+  protected readonly removingId = signal<number | null>(null);
+  protected readonly listFailed = signal(false);
+
+  protected readonly form = this.createForm();
+  protected readonly editForm = this.createForm();
 
   constructor() {
     // IndexedDB only exists in the browser, so never load during prerender.
@@ -43,8 +45,71 @@ export class Subscriptions {
     }
   }
 
+  protected startEdit(sub: Subscription): void {
+    this.removingId.set(null);
+    this.listFailed.set(false);
+    this.editForm.reset({
+      name: sub.name,
+      amount: sub.amount,
+      cycle: sub.cycle,
+      nextRenewal: sub.nextRenewal,
+    });
+    this.editingId.set(sub.id!);
+  }
+
+  protected cancelEdit(): void {
+    this.editingId.set(null);
+  }
+
+  protected async saveEdit(id: number): Promise<void> {
+    if (this.editForm.invalid) return;
+
+    const { name, amount, cycle, nextRenewal } = this.editForm.getRawValue();
+    await this.run(async () => {
+      await db.subscriptions.update(id, { name: name.trim(), amount: amount!, cycle, nextRenewal });
+      this.editingId.set(null);
+    });
+  }
+
+  protected askRemove(id: number): void {
+    this.editingId.set(null);
+    this.listFailed.set(false);
+    this.removingId.set(id);
+  }
+
+  protected keep(): void {
+    this.removingId.set(null);
+  }
+
+  protected async remove(id: number): Promise<void> {
+    await this.run(async () => {
+      await db.subscriptions.delete(id);
+      this.removingId.set(null);
+    });
+  }
+
+  /** Runs a list change, then reloads; shows a quiet message if it fails. */
+  private async run(change: () => Promise<void>): Promise<void> {
+    this.listFailed.set(false);
+    try {
+      await change();
+      await this.load();
+    } catch {
+      this.listFailed.set(true);
+    }
+  }
+
   private async load(): Promise<void> {
     this.subscriptions.set(await db.subscriptions.orderBy('nextRenewal').toArray());
     this.loaded.set(true);
+  }
+
+  private createForm() {
+    return this.fb.group({
+      name: ['', Validators.required],
+      amount: [null as number | null, [Validators.required, Validators.min(0)]],
+      cycle: ['monthly' as Subscription['cycle'], Validators.required],
+      nextRenewal: ['', Validators.required],
+    });
   }
 }
