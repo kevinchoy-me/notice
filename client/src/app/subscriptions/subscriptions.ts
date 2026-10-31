@@ -2,6 +2,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, afterNextRender, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subscription, db } from '../core/db';
+import { loadSubscriptions } from '../core/renewals';
 
 @Component({
   selector: 'app-subscriptions',
@@ -101,7 +102,7 @@ export class Subscriptions {
   }
 
   private async load(): Promise<void> {
-    this.subscriptions.set(await db.subscriptions.orderBy('nextRenewal').toArray());
+    this.subscriptions.set(await loadSubscriptions());
     this.loaded.set(true);
   }
 
