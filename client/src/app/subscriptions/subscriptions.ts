@@ -1,8 +1,8 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, afterNextRender, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Subscription, db } from '../core/db';
-import { loadSubscriptions } from '../core/renewals';
+import { Subscription, dayOf, db } from '../core/db';
+import { loadSubscriptions, notPastDate, toIsoDate } from '../core/renewals';
 
 @Component({
   selector: 'app-subscriptions',
@@ -22,12 +22,18 @@ export class Subscriptions {
   protected readonly removingId = signal<number | null>(null);
   protected readonly listFailed = signal(false);
 
+  /** Earliest date the date pickers offer; set in the browser so the build date never ends up in the HTML. */
+  protected readonly minDate = signal<string | null>(null);
+
   protected readonly form = this.createForm();
   protected readonly editForm = this.createForm();
 
   constructor() {
     // IndexedDB only exists in the browser, so never load during prerender.
-    afterNextRender(() => this.load().catch(() => this.loadFailed.set(true)));
+    afterNextRender(() => {
+      this.minDate.set(toIsoDate(new Date()));
+      this.load().catch(() => this.loadFailed.set(true));
+    });
   }
 
   protected async add(): Promise<void> {
@@ -37,7 +43,13 @@ export class Subscriptions {
     this.saving.set(true);
     this.saveFailed.set(false);
     try {
-      await db.subscriptions.add({ name: name.trim(), amount: amount!, cycle, nextRenewal });
+      await db.subscriptions.add({
+        name: name.trim(),
+        amount: amount!,
+        cycle,
+        nextRenewal,
+        anchorDay: dayOf(nextRenewal),
+      });
       this.form.reset();
       await this.load();
     } catch {
@@ -67,8 +79,16 @@ export class Subscriptions {
     if (this.editForm.invalid) return;
 
     const { name, amount, cycle, nextRenewal } = this.editForm.getRawValue();
+    const dateChanged = this.subscriptions().find((s) => s.id === id)?.nextRenewal !== nextRenewal;
     await this.run(async () => {
-      await db.subscriptions.update(id, { name: name.trim(), amount: amount!, cycle, nextRenewal });
+      await db.subscriptions.update(id, {
+        name: name.trim(),
+        amount: amount!,
+        cycle,
+        nextRenewal,
+        // A new date sets a new anchor; an unchanged one keeps it (a 31st shown as 30 Nov stays a 31st).
+        ...(dateChanged ? { anchorDay: dayOf(nextRenewal) } : {}),
+      });
       this.editingId.set(null);
     });
   }
@@ -111,7 +131,7 @@ export class Subscriptions {
       name: ['', Validators.required],
       amount: [null as number | null, [Validators.required, Validators.min(0)]],
       cycle: ['monthly' as Subscription['cycle'], Validators.required],
-      nextRenewal: ['', Validators.required],
+      nextRenewal: ['', [Validators.required, notPastDate]],
     });
   }
 }
