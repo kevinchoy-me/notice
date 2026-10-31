@@ -25,7 +25,10 @@
                 </label>
                 <label class="block sm:col-span-2">
                   <span class="text-sm text-ink-muted">Next renewal</span>
-                  <input class="field" type="date" formControlName="nextRenewal" required />
+                  <input class="field" type="date" formControlName="nextRenewal" [attr.min]="minDate()" required />
+                  @if (editForm.controls.nextRenewal.hasError('pastDate')) {
+                    <span class="mt-1 block text-sm text-ink-muted">Choose today or a later date.</span>
+                  }
                 </label>
                 <div class="flex items-center gap-4 sm:col-span-2">
                   <button
@@ -107,7 +110,10 @@
 
       <label class="block sm:col-span-2">
         <span class="text-sm text-ink-muted">Next renewal</span>
-        <input class="field" type="date" formControlName="nextRenewal" required />
+        <input class="field" type="date" formControlName="nextRenewal" [attr.min]="minDate()" required />
+        @if (form.controls.nextRenewal.hasError('pastDate')) {
+          <span class="mt-1 block text-sm text-ink-muted">Choose today or a later date.</span>
+        }
       </label>
 
       <div class="flex items-center gap-4 sm:col-span-2">

@@ -1,4 +1,5 @@
-import { advanceRenewal } from './renewals';
+import { FormControl } from '@angular/forms';
+import { advanceRenewal, notPastDate, toIsoDate } from './renewals';
 
 describe('advanceRenewal', () => {
   const today = new Date(2026, 9, 31); // 31 Oct 2026, local time
@@ -29,5 +30,43 @@ describe('advanceRenewal', () => {
 
   it('moves a 29 February yearly renewal to 28 February in common years', () => {
     expect(advanceRenewal('2024-02-29', 'yearly', today)).toBe('2027-02-28');
+  });
+});
+
+describe('advanceRenewal with an anchor day', () => {
+  it('returns a 31st to the 31st after a shorter month', () => {
+    const march = new Date(2027, 2, 5); // 5 Mar 2027
+    expect(advanceRenewal('2027-02-28', 'monthly', march, 31)).toBe('2027-03-31');
+  });
+
+  it('uses the last day when the anchor does not fit the target month', () => {
+    const may = new Date(2027, 4, 1); // 1 May 2027
+    expect(advanceRenewal('2027-03-31', 'monthly', may, 31)).toBe('2027-05-31');
+    const lateApril = new Date(2027, 3, 2); // 2 Apr 2027
+    expect(advanceRenewal('2027-03-31', 'monthly', lateApril, 31)).toBe('2027-04-30');
+  });
+
+  it('returns a 29 February yearly renewal to the 29th in leap years', () => {
+    const march2027 = new Date(2027, 2, 1); // 1 Mar 2027
+    expect(advanceRenewal('2027-02-28', 'yearly', march2027, 29)).toBe('2028-02-29');
+  });
+});
+
+describe('notPastDate', () => {
+  const control = (value: string) => new FormControl(value, { nonNullable: true });
+  const today = toIsoDate(new Date());
+  const yesterday = toIsoDate(new Date(Date.now() - 864e5 * 1.5));
+
+  it('accepts today and later', () => {
+    expect(notPastDate(control(today))).toBeNull();
+    expect(notPastDate(control('2999-01-01'))).toBeNull();
+  });
+
+  it('rejects a past date', () => {
+    expect(notPastDate(control(yesterday))).toEqual({ pastDate: true });
+  });
+
+  it('leaves an empty value to the required validator', () => {
+    expect(notPastDate(control(''))).toBeNull();
   });
 });
