@@ -13,6 +13,7 @@ export class Subscriptions {
 
   protected readonly subscriptions = signal<Subscription[]>([]);
   protected readonly loaded = signal(false);
+  protected readonly loadFailed = signal(false);
   protected readonly saving = signal(false);
   protected readonly saveFailed = signal(false);
 
@@ -25,7 +26,7 @@ export class Subscriptions {
 
   constructor() {
     // IndexedDB only exists in the browser, so never load during prerender.
-    afterNextRender(() => this.load());
+    afterNextRender(() => this.load().catch(() => this.loadFailed.set(true)));
   }
 
   protected async add(): Promise<void> {

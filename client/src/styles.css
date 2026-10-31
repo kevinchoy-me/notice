@@ -1,3 +1,8 @@
+/* Hallmark · checked: 2026-10-31 · genre: editorial (inferred) · shape: app screen · surface: absolute
+ * floor: 0 FAIL · fixed: 26a, 34, 40, 48, 26b, 39a, 39b, 63, F1, F16, F23, load error states · structural: none
+ * built: the project · redesign: polish · v2.0.0 */
+/* Hallmark · waive 7b · surface: absolute in the stamp, card text passes 40 and 41 · white #FFFFFF cards on the #F9F8F6 canvas are the Soft Minimal surface spec for Occura */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,12 +14,47 @@
   --color-ink: #1c1b19;
   --color-ink-muted: #6b6560;
   --color-accent: #5b7c6e;
+  /* Accent for small text on canvas (4.7:1); --color-accent stays for large text and fills. */
+  --color-accent-strong: #567669;
+  /* Field edges: 3:1 on both canvas and surface. */
+  --color-line: #918d89;
+  --color-selection: rgb(91 124 110 / 0.2);
+  --shadow-card:
+    0 1px 2px rgb(28 27 25 / 0.04),
+    0 8px 24px rgb(28 27 25 / 0.06);
 }
 
 @layer base {
+  html,
+  body {
+    overflow-x: clip;
+  }
+
+  html {
+    scrollbar-color: var(--color-line) var(--color-canvas);
+  }
+
   body {
     background-color: var(--color-canvas);
     color: var(--color-ink);
+  }
+
+  ::selection {
+    background-color: var(--color-selection);
+  }
+
+  /* One instant focus ring for every control. */
+  :where(a, button, input, select, textarea):focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  :where(a, button):active {
+    opacity: 0.7;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
   }
 }
 
@@ -23,12 +63,22 @@
     background-color: var(--color-surface);
     border-radius: 1rem;
     padding: 1.5rem;
-    box-shadow:
-      0 1px 2px rgb(28 27 25 / 0.04),
-      0 8px 24px rgb(28 27 25 / 0.06);
+    box-shadow: var(--shadow-card);
   }
 
   .field {
-    @apply mt-1 block w-full rounded-xl border border-ink/10 bg-canvas px-3 py-2 text-ink outline-none transition-colors focus:border-accent/50 focus:ring-2 focus:ring-accent/15;
+    @apply mt-1 block h-10 w-full rounded-xl border border-line bg-canvas px-3 text-ink transition-colors focus-visible:border-accent;
+    caret-color: var(--color-accent);
+  }
+
+  /* Widens a small text control's tap area to 44px tall without moving the layout. */
+  .hit {
+    position: relative;
+  }
+
+  .hit::after {
+    content: '';
+    position: absolute;
+    inset: -12px -8px;
   }
 }

@@ -9,6 +9,8 @@ module.exports = {
         ink: '#1C1B19',
         'ink-muted': '#6B6560',
         accent: '#5B7C6E',
+        'accent-strong': '#567669',
+        line: '#918D89',
       },
     },
   },
