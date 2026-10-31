@@ -1,0 +1,39 @@
+<section class="card">
+  <h1 class="text-xl font-light">Upcoming renewals</h1>
+
+  @if (loadFailed()) {
+    <p class="mt-4 text-ink-muted" role="status">
+      Your subscriptions couldn’t be opened in this browser. Private browsing or blocked site data are the usual cause.
+    </p>
+  } @else if (subscriptions(); as subs) {
+    @if (subs.length === 0) {
+      <p class="mt-4 text-ink-muted">Nothing to look at yet. Renewals will line up here once you add a subscription.</p>
+    } @else {
+      <p class="mt-4 text-sm text-ink-muted">
+        Together, about <span class="text-ink">{{ monthlyTotal() | number: '1.2-2' }}</span> a month.
+      </p>
+
+      <ul class="mt-6 divide-y divide-ink/5">
+        @for (sub of subs; track sub.id) {
+          <li class="flex items-baseline justify-between gap-4 py-4">
+            <div>
+              <p>{{ sub.name }}</p>
+              <p class="mt-1 text-sm text-ink-muted">Renews {{ sub.nextRenewal | date: 'd MMM y' }}</p>
+            </div>
+            <p class="whitespace-nowrap text-ink-muted">
+              <span class="text-ink tabular-nums">{{ sub.amount | number: '1.2-2' }}</span>
+              / {{ sub.cycle === 'monthly' ? 'month' : 'year' }}
+            </p>
+          </li>
+        }
+      </ul>
+    }
+  }
+
+  <a
+    routerLink="/subscriptions"
+    class="hit mt-6 inline-block text-sm text-accent underline decoration-accent/30 underline-offset-4 transition-colors hover:decoration-accent"
+  >
+    {{ subscriptions()?.length === 0 ? 'Add your first subscription' : 'View subscriptions' }}
+  </a>
+</section>

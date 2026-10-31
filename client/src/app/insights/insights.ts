@@ -1,12 +1,29 @@
-import { Component } from '@angular/core';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { Component, afterNextRender, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { Subscription, db } from '../core/db';
+import { monthlyTotal } from '../home/awareness';
 
 @Component({
   selector: 'app-insights',
-  template: `
-    <section class="card">
-      <h1 class="text-xl font-light">Insights</h1>
-      <p class="mt-2 text-ink-muted">Gentle weekly reflections will appear here.</p>
-    </section>
-  `,
+  imports: [RouterLink, DatePipe, DecimalPipe],
+  templateUrl: './insights.html',
 })
-export class Insights {}
+export class Insights {
+  protected readonly subscriptions = signal<Subscription[] | null>(null);
+  protected readonly monthlyTotal = signal(0);
+  protected readonly loadFailed = signal(false);
+
+  constructor() {
+    // IndexedDB only exists in the browser, so never read during prerender.
+    afterNextRender(async () => {
+      try {
+        const subs = await db.subscriptions.orderBy('nextRenewal').toArray();
+        this.subscriptions.set(subs);
+        this.monthlyTotal.set(monthlyTotal(subs));
+      } catch {
+        this.loadFailed.set(true);
+      }
+    });
+  }
+}

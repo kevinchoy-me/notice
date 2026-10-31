@@ -24,9 +24,14 @@ export function weeklyAwareness(subscriptions: Subscription[], today: Date): Wee
     upcoming: subscriptions
       .filter((s) => s.nextRenewal >= start && s.nextRenewal <= end)
       .sort((a, b) => a.nextRenewal.localeCompare(b.nextRenewal)),
-    monthlyTotal: subscriptions.reduce(
-      (sum, s) => sum + (s.cycle === 'monthly' ? s.amount : s.amount / 12),
-      0,
-    ),
+    monthlyTotal: monthlyTotal(subscriptions),
   };
+}
+
+/** Monthly-equivalent total: yearly amounts are spread across 12 months. */
+export function monthlyTotal(subscriptions: Subscription[]): number {
+  return subscriptions.reduce(
+    (sum, s) => sum + (s.cycle === 'monthly' ? s.amount : s.amount / 12),
+    0,
+  );
 }
