@@ -1,12 +1,13 @@
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, afterNextRender, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { MoneyPipe } from '../core/money';
 import { loadSubscriptions } from '../core/renewals';
 import { WeeklyAwareness, weeklyAwareness } from './awareness';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, DatePipe, DecimalPipe],
+  imports: [RouterLink, DatePipe, MoneyPipe],
   templateUrl: './home.html',
 })
 export class Home {

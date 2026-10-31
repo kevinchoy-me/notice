@@ -1,12 +1,13 @@
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, afterNextRender, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MoneyPipe } from '../core/money';
 import { Subscription, dayOf, db } from '../core/db';
 import { loadSubscriptions, notPastDate, toIsoDate } from '../core/renewals';
 
 @Component({
   selector: 'app-subscriptions',
-  imports: [ReactiveFormsModule, DatePipe, DecimalPipe],
+  imports: [ReactiveFormsModule, DatePipe, MoneyPipe],
   templateUrl: './subscriptions.html',
 })
 export class Subscriptions {
