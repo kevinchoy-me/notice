@@ -5,5 +5,8 @@
   "assets": {
     "directory": "./dist/occura/browser",
     "html_handling": "drop-trailing-slash"
-  }
+  },
+  // Lets Cloudflare's PR-branch builds run `wrangler preview`. Empty on purpose:
+  // assets and compatibility settings above apply to previews too.
+  "previews": {}
 }
