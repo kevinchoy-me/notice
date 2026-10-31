@@ -11,12 +11,17 @@ import { WeeklyAwareness, weeklyAwareness } from './awareness';
 })
 export class Home {
   protected readonly awareness = signal<WeeklyAwareness | null>(null);
+  protected readonly loadFailed = signal(false);
 
   constructor() {
     // IndexedDB only exists in the browser, so never read during prerender.
     afterNextRender(async () => {
-      const subscriptions = await db.subscriptions.toArray();
-      this.awareness.set(weeklyAwareness(subscriptions, new Date()));
+      try {
+        const subscriptions = await db.subscriptions.toArray();
+        this.awareness.set(weeklyAwareness(subscriptions, new Date()));
+      } catch {
+        this.loadFailed.set(true);
+      }
     });
   }
 }
