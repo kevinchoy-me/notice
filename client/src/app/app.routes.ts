@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { About } from './about/about';
 import { Home } from './home/home';
 import { Insights } from './insights/insights';
 import { Subscriptions } from './subscriptions/subscriptions';
@@ -29,6 +30,15 @@ export const routes: Routes = [
     data: {
       description:
         'Every renewal in date order, with a quiet monthly total. Private by design: your data never leaves this device.',
+    },
+  },
+  {
+    path: 'about',
+    component: About,
+    title: 'About Occura · A calm way to keep track of subscriptions',
+    data: {
+      description:
+        'Notice which subscriptions renew this week and what they add up to each month. No account, no bank link: your data stays on your device.',
     },
   },
 ];
