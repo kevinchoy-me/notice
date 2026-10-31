@@ -6,6 +6,14 @@
     "directory": "./dist/occura/browser",
     "html_handling": "drop-trailing-slash"
   },
+  // Matches the logging settings in the Cloudflare dashboard, so a deploy doesn't switch them off.
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+      "persist": true
+    }
+  },
   // Lets Cloudflare's PR-branch builds run `wrangler preview`. Empty on purpose:
   // assets and compatibility settings above apply to previews too.
   "previews": {}
