@@ -2,7 +2,11 @@ import { DOCUMENT, Injectable, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
 
-/** The public address of the site. Canonical links and the sitemap use it. */
+/**
+ * The public address of the site. Canonical links, Open Graph URLs and public/sitemap.xml use it.
+ * occura.co is connected to the Cloudflare Worker; if the domain ever changes, update this
+ * and the URLs in public/robots.txt and public/sitemap.xml together.
+ */
 export const SITE_URL = 'https://occura.co';
 
 /** Canonical address for a router URL: no query or fragment, no trailing slash (matches Cloudflare's drop-trailing-slash). */
@@ -12,8 +16,8 @@ export function canonicalUrl(routerUrl: string): string {
 }
 
 /**
- * Sets each page's title, meta description and canonical link from its route,
- * during prerender and in the browser.
+ * Sets each page's title, meta description, canonical link and Open Graph tags
+ * from its route, during prerender and in the browser.
  */
 @Injectable({ providedIn: 'root' })
 export class PageTitleStrategy extends TitleStrategy {
@@ -23,6 +27,7 @@ export class PageTitleStrategy extends TitleStrategy {
 
   override updateTitle(snapshot: RouterStateSnapshot): void {
     const title = this.buildTitle(snapshot);
+    const url = canonicalUrl(snapshot.url);
     if (title) this.title.setTitle(title);
 
     let route = snapshot.root;
@@ -30,7 +35,14 @@ export class PageTitleStrategy extends TitleStrategy {
     const description = route.data['description'] as string | undefined;
     if (description) this.meta.updateTag({ name: 'description', content: description });
 
-    this.setCanonical(canonicalUrl(snapshot.url));
+    this.setCanonical(url);
+
+    // Open Graph: what chat apps and social sites show when a link is shared.
+    this.meta.updateTag({ property: 'og:site_name', content: 'Occura' });
+    this.meta.updateTag({ property: 'og:type', content: 'website' });
+    this.meta.updateTag({ property: 'og:url', content: url });
+    if (title) this.meta.updateTag({ property: 'og:title', content: title });
+    if (description) this.meta.updateTag({ property: 'og:description', content: description });
   }
 
   private setCanonical(href: string): void {
