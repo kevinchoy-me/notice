@@ -1,13 +1,14 @@
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, afterNextRender, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { MoneyPipe } from '../core/money';
 import { Subscription } from '../core/db';
 import { loadSubscriptions } from '../core/renewals';
 import { monthlyTotal } from '../home/awareness';
 
 @Component({
   selector: 'app-insights',
-  imports: [RouterLink, DatePipe, DecimalPipe],
+  imports: [RouterLink, DatePipe, MoneyPipe],
   templateUrl: './insights.html',
 })
 export class Insights {

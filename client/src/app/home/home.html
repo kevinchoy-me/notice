@@ -21,7 +21,7 @@
             <li class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-baseline gap-x-6 text-sm">
               <span>{{ sub.name }}</span>
               <span class="whitespace-nowrap text-ink-muted">{{ sub.nextRenewal | date: 'EEE d MMM' }}</span>
-              <span class="whitespace-nowrap text-right tabular-nums">{{ sub.amount | number: '1.2-2' }}</span>
+              <span class="whitespace-nowrap text-right tabular-nums">{{ sub.amount | money }}</span>
             </li>
           }
         </ul>
@@ -31,7 +31,7 @@
 
       <p class="mt-6 text-sm text-ink-muted">
         Across {{ a.count }} {{ a.count === 1 ? 'subscription' : 'subscriptions' }}, that’s about
-        <span class="text-ink">{{ a.monthlyTotal | number: '1.2-2' }}</span> a month.
+        <span class="text-ink">{{ a.monthlyTotal | money }}</span> a month.
       </p>
     }
   }

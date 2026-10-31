@@ -50,7 +50,7 @@
                   <p class="mt-1 text-sm text-ink-muted">Renews {{ sub.nextRenewal | date: 'd MMM y' }}</p>
                 </div>
                 <p class="whitespace-nowrap text-ink-muted">
-                  <span class="text-ink">{{ sub.amount | number: '1.2-2' }}</span>
+                  <span class="text-ink">{{ sub.amount | money }}</span>
                   / {{ sub.cycle === 'monthly' ? 'month' : 'year' }}
                 </p>
               </div>

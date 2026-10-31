@@ -10,7 +10,7 @@
       <p class="mt-4 text-ink-muted">Nothing to look at yet. Renewals will line up here once you add a subscription.</p>
     } @else {
       <p class="mt-4 text-sm text-ink-muted">
-        Together, about <span class="text-ink">{{ monthlyTotal() | number: '1.2-2' }}</span> a month.
+        Together, about <span class="text-ink">{{ monthlyTotal() | money }}</span> a month.
       </p>
 
       <ul class="mt-6 divide-y divide-ink/5">
@@ -21,7 +21,7 @@
               <p class="mt-1 text-sm text-ink-muted">Renews {{ sub.nextRenewal | date: 'd MMM y' }}</p>
             </div>
             <p class="whitespace-nowrap text-ink-muted">
-              <span class="text-ink tabular-nums">{{ sub.amount | number: '1.2-2' }}</span>
+              <span class="text-ink tabular-nums">{{ sub.amount | money }}</span>
               / {{ sub.cycle === 'monthly' ? 'month' : 'year' }}
             </p>
           </li>
