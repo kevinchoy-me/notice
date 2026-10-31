@@ -21,13 +21,15 @@
     <router-outlet />
   </main>
 
-  <footer class="mt-16 text-sm">
-    <a
-      routerLink="/about"
-      routerLinkActive
-      ariaCurrentWhenActive="page"
-      class="hit text-ink-muted transition-colors hover:text-ink aria-[current=page]:text-accent-strong"
-      >About Occura</a
-    >
+  <footer class="mt-16 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+    @for (link of footerLinks; track link.path) {
+      <a
+        [routerLink]="link.path"
+        routerLinkActive
+        ariaCurrentWhenActive="page"
+        class="hit text-ink-muted transition-colors hover:text-ink aria-[current=page]:text-accent-strong"
+        >{{ link.label }}</a
+      >
+    }
   </footer>
 </div>

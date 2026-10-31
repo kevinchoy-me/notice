@@ -13,4 +13,9 @@ export class App {
     { path: '/subscriptions', label: 'Subscriptions' },
     { path: '/insights', label: 'Insights' },
   ];
+
+  protected readonly footerLinks = [
+    { path: '/about', label: 'About Occura' },
+    { path: '/track-subscriptions', label: 'Keeping track of subscriptions' },
+  ];
 }
