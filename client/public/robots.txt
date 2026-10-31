@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://occura.co/sitemap.xml
+Sitemap: https://www.occurra.co/sitemap.xml
