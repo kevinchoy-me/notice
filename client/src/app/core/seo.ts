@@ -4,10 +4,10 @@ import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
 
 /**
  * The public address of the site. Canonical links, Open Graph URLs and public/sitemap.xml use it.
- * occura.co is connected to the Cloudflare Worker; if the domain ever changes, update this
+ * www.occurra.co is connected to the Cloudflare Worker; if the domain ever changes, update this
  * and the URLs in public/robots.txt and public/sitemap.xml together.
  */
-export const SITE_URL = 'https://occura.co';
+export const SITE_URL = 'https://www.occurra.co';
 
 /** Canonical address for a router URL: no query or fragment, no trailing slash (matches Cloudflare's drop-trailing-slash). */
 export function canonicalUrl(routerUrl: string): string {
@@ -38,7 +38,7 @@ export class PageTitleStrategy extends TitleStrategy {
     this.setCanonical(url);
 
     // Open Graph: what chat apps and social sites show when a link is shared.
-    this.meta.updateTag({ property: 'og:site_name', content: 'Occura' });
+    this.meta.updateTag({ property: 'og:site_name', content: 'Occurra' });
     this.meta.updateTag({ property: 'og:type', content: 'website' });
     this.meta.updateTag({ property: 'og:url', content: url });
     if (title) this.meta.updateTag({ property: 'og:title', content: title });

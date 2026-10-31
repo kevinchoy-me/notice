@@ -1,7 +1,7 @@
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 
-/** The one currency Occura shows. Change it here; there is no picker yet. */
+/** The one currency Occurra shows. Change it here; there is no picker yet. */
 export const CURRENCY_CODE = 'USD';
 
 /** Formats an amount quietly with the currency symbol, e.g. 12.99 → $12.99. */
