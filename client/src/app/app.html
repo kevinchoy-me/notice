@@ -4,7 +4,7 @@
     <p class="text-sm text-ink-muted">Quiet awareness for recurring money</p>
   </header>
 
-  <nav class="mt-8 flex gap-6 text-sm" aria-label="Main">
+  <nav class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm" aria-label="Main">
     @for (link of links; track link.path) {
       <a
         [routerLink]="link.path"

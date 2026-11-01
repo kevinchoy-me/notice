@@ -11,8 +11,17 @@ export interface Subscription {
   notes?: string;
 }
 
+export interface Expense {
+  id?: number;
+  name: string;
+  amount: number;
+  date: string; // ISO date string, YYYY-MM-DD
+  notes?: string;
+}
+
 export class OccuraDB extends Dexie {
   subscriptions!: Table<Subscription>;
+  expenses!: Table<Expense>;
 
   constructor() {
     super('OccuraDB');
@@ -30,6 +39,11 @@ export class OccuraDB extends Dexie {
             s.anchorDay ??= dayOf(s.nextRenewal);
           }),
       );
+    // v3: light expenses. Adds a table only; existing subscriptions are untouched.
+    this.version(3).stores({
+      subscriptions: '++id, name, nextRenewal',
+      expenses: '++id, date',
+    });
   }
 }
 
