@@ -5,6 +5,7 @@ import { Guide } from './guide/guide';
 import { Home } from './home/home';
 import { Insights } from './insights/insights';
 import { Subscriptions } from './subscriptions/subscriptions';
+import { Vouchers } from './vouchers/vouchers';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,15 @@ export const routes: Routes = [
     data: {
       description:
         'A light, private list of everyday expenses, newest first. No categories, no budgets. Stored only in your browser.',
+    },
+  },
+  {
+    path: 'vouchers',
+    component: Vouchers,
+    title: 'Vouchers · Occurra',
+    data: {
+      description:
+        'Keep gift cards and vouchers in one calm list, with the soonest expiry first, so they get used. Stored only in your browser.',
     },
   },
   {

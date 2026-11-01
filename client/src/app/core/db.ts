@@ -19,9 +19,18 @@ export interface Expense {
   notes?: string;
 }
 
+export interface Voucher {
+  id?: number;
+  name: string;
+  value: number;
+  expiry?: string; // ISO date string, YYYY-MM-DD; absent when it doesn't expire
+  notes?: string;
+}
+
 export class OccuraDB extends Dexie {
   subscriptions!: Table<Subscription>;
   expenses!: Table<Expense>;
+  vouchers!: Table<Voucher>;
 
   constructor() {
     super('OccuraDB');
@@ -43,6 +52,12 @@ export class OccuraDB extends Dexie {
     this.version(3).stores({
       subscriptions: '++id, name, nextRenewal',
       expenses: '++id, date',
+    });
+    // v4: vouchers. Adds a table only; subscriptions and expenses are untouched.
+    this.version(4).stores({
+      subscriptions: '++id, name, nextRenewal',
+      expenses: '++id, date',
+      vouchers: '++id, name, expiry',
     });
   }
 }

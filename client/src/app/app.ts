@@ -12,6 +12,7 @@ export class App {
     { path: '/', label: 'Home' },
     { path: '/subscriptions', label: 'Subscriptions' },
     { path: '/expenses', label: 'Expenses' },
+    { path: '/vouchers', label: 'Vouchers' },
     { path: '/insights', label: 'Insights' },
   ];
 
