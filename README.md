@@ -29,3 +29,9 @@ npm start
 - After a deploy, submit https://www.occurra.co/sitemap.xml in Google Search Console.
 - Google Search Console verification file: `client/public/google8cbf628a1c17b8d1.html/index.html`. It's a folder on purpose: Cloudflare's `drop-trailing-slash` handling redirects a plain `.html` file to its extensionless address, and this layout serves `/google8cbf628a1c17b8d1.html` directly with a 200. Don't remove it, or the site loses verification.
 - Internal names keep the old spelling on purpose: the browser database `OccuraDB` (renaming it would leave existing users with an empty list), the Angular project and package name `occura`, and the build folder `dist/occura/browser` that `wrangler.jsonc` and Cloudflare's build use.
+
+## Logo and icons
+
+- The mark is a sage (`#5B7C6E`) chevron on warm off-white (`#F9F8F6`). It's a clean SVG recreation from the chosen logo's description, not the original artwork; replace both SVGs if the original file becomes available.
+- Sources: `client/public/icons/logo.svg` (app icons, kept inside the maskable safe zone) and `client/public/favicon.svg` (tighter crop for browser tabs).
+- Exported files: `favicon.ico` (16, 32, 48), `icons/icon-192.png`, `icons/icon-512.png`, `icons/icon-maskable-512.png`, `icons/apple-touch-icon.png` (180). Re-export all of them if the SVGs change.
