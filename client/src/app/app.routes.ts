@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { About } from './about/about';
+import { Expenses } from './expenses/expenses';
 import { Guide } from './guide/guide';
 import { Home } from './home/home';
 import { Insights } from './insights/insights';
@@ -22,6 +23,15 @@ export const routes: Routes = [
     data: {
       description:
         'Keep a calm list of your subscriptions and recurring payments, with renewal dates that stay up to date. Stored only in your browser.',
+    },
+  },
+  {
+    path: 'expenses',
+    component: Expenses,
+    title: 'Expenses · Occurra',
+    data: {
+      description:
+        'A light, private list of everyday expenses, newest first. No categories, no budgets. Stored only in your browser.',
     },
   },
   {

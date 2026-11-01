@@ -11,6 +11,7 @@ export class App {
   protected readonly links = [
     { path: '/', label: 'Home' },
     { path: '/subscriptions', label: 'Subscriptions' },
+    { path: '/expenses', label: 'Expenses' },
     { path: '/insights', label: 'Insights' },
   ];
 

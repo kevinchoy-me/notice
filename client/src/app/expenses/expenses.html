@@ -1,0 +1,68 @@
+<div class="space-y-8">
+  <section class="card">
+    <h1 class="text-xl font-light">Expenses</h1>
+
+    @if (loaded() && expenses().length) {
+      <ul class="mt-6 divide-y divide-ink/5">
+        @for (expense of expenses(); track expense.id) {
+          <li class="flex items-baseline justify-between gap-4 py-4">
+            <div class="min-w-0">
+              <p>{{ expense.name }}</p>
+              <p class="mt-1 text-sm text-ink-muted">{{ expense.date | date: 'd MMM y' }}</p>
+              @if (expense.notes) {
+                <p class="mt-1 text-sm text-ink-muted">{{ expense.notes }}</p>
+              }
+            </div>
+            <p class="whitespace-nowrap tabular-nums">{{ expense.amount | money }}</p>
+          </li>
+        }
+      </ul>
+    } @else if (loadFailed()) {
+      <p class="mt-2 text-ink-muted" role="status">
+        This browser isn’t letting Occurra keep data right now, so nothing can be saved here. Private browsing or
+        blocked site data are the usual cause.
+      </p>
+    } @else if (loaded()) {
+      <p class="mt-2 text-ink-muted">Nothing here yet. Add an expense below whenever you’d like to notice one.</p>
+    }
+  </section>
+
+  <section class="card">
+    <h2 class="text-lg font-light">Add an expense</h2>
+
+    <form class="mt-6 grid gap-5 sm:grid-cols-2" [formGroup]="form" (ngSubmit)="add()">
+      <label class="block sm:col-span-2">
+        <span class="text-sm text-ink-muted">What was it for?</span>
+        <input class="field" type="text" formControlName="name" autocomplete="off" required />
+      </label>
+
+      <label class="block">
+        <span class="text-sm text-ink-muted">Amount</span>
+        <input class="field" type="number" formControlName="amount" min="0" step="0.01" inputmode="decimal" required />
+      </label>
+
+      <label class="block">
+        <span class="text-sm text-ink-muted">Date</span>
+        <input class="field" type="date" formControlName="date" required />
+      </label>
+
+      <label class="block sm:col-span-2">
+        <span class="text-sm text-ink-muted">Notes <span class="text-ink-muted/80">(optional)</span></span>
+        <input class="field" type="text" formControlName="notes" autocomplete="off" />
+      </label>
+
+      <div class="flex items-center gap-4 sm:col-span-2">
+        <button
+          type="submit"
+          class="rounded-full border border-accent/30 px-5 py-2 text-sm text-accent transition-colors hover:bg-accent/5 disabled:opacity-40"
+          [disabled]="form.invalid || saving() || loadFailed()"
+        >
+          Add
+        </button>
+        @if (saveFailed()) {
+          <p class="text-sm text-ink-muted" role="status">That didn’t save. Please try again.</p>
+        }
+      </div>
+    </form>
+  </section>
+</div>
