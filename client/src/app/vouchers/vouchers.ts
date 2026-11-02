@@ -22,12 +22,12 @@ export class Vouchers {
   /** Today as YYYY-MM-DD, set in the browser, so a passed expiry can read "Expired". */
   protected readonly today = signal('');
 
-  protected readonly form = this.fb.group({
-    name: ['', Validators.required],
-    value: [null as number | null, [Validators.required, Validators.min(0)]],
-    expiry: [''],
-    notes: [''],
-  });
+  protected readonly editingId = signal<number | null>(null);
+  protected readonly removingId = signal<number | null>(null);
+  protected readonly listFailed = signal(false);
+
+  protected readonly form = this.createForm();
+  protected readonly editForm = this.createForm();
 
   constructor() {
     // IndexedDB only exists in the browser, so never load during prerender.
@@ -60,8 +60,77 @@ export class Vouchers {
     }
   }
 
+  protected startEdit(voucher: Voucher): void {
+    this.removingId.set(null);
+    this.listFailed.set(false);
+    this.editForm.reset({
+      name: voucher.name,
+      value: voucher.value,
+      expiry: voucher.expiry ?? '',
+      notes: voucher.notes ?? '',
+    });
+    this.editingId.set(voucher.id!);
+  }
+
+  protected cancelEdit(): void {
+    this.editingId.set(null);
+  }
+
+  protected async saveEdit(id: number): Promise<void> {
+    if (this.editForm.invalid) return;
+
+    const { name, value, expiry, notes } = this.editForm.getRawValue();
+    await this.run(async () => {
+      // A cleared expiry or note is removed (Dexie deletes a property set to undefined).
+      await db.vouchers.update(id, {
+        name: name.trim(),
+        value: value!,
+        expiry: expiry || undefined,
+        notes: notes.trim() || undefined,
+      });
+      this.editingId.set(null);
+    });
+  }
+
+  protected askRemove(id: number): void {
+    this.editingId.set(null);
+    this.listFailed.set(false);
+    this.removingId.set(id);
+  }
+
+  protected keep(): void {
+    this.removingId.set(null);
+  }
+
+  protected async remove(id: number): Promise<void> {
+    await this.run(async () => {
+      await db.vouchers.delete(id);
+      this.removingId.set(null);
+    });
+  }
+
+  /** Runs a list change, then reloads; shows a quiet message if it fails. */
+  private async run(change: () => Promise<void>): Promise<void> {
+    this.listFailed.set(false);
+    try {
+      await change();
+      await this.load();
+    } catch {
+      this.listFailed.set(true);
+    }
+  }
+
   private async load(): Promise<void> {
     this.vouchers.set(sortVouchers(await db.vouchers.toArray()));
     this.loaded.set(true);
+  }
+
+  private createForm() {
+    return this.fb.group({
+      name: ['', Validators.required],
+      value: [null as number | null, [Validators.required, Validators.min(0)]],
+      expiry: [''],
+      notes: [''],
+    });
   }
 }
