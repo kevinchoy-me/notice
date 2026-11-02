@@ -3,36 +3,65 @@
 
   @if (loadFailed()) {
     <p class="mt-4 text-ink-muted" role="status">
-      Your subscriptions couldn’t be opened in this browser. Private browsing or blocked site data are the usual cause.
+      Your lists couldn’t be opened in this browser. Private browsing or blocked site data are the usual cause.
     </p>
-  } @else if (awareness(); as a) {
-    @if (a.count === 0) {
+  } @else if (view(); as v) {
+    @if (v.empty) {
       <p class="mt-4 text-ink-muted">
-        Nothing to notice yet. Once you add a subscription, a quiet view of the week ahead will gather here.
+        Nothing to notice yet. Once you add a subscription, an expense or a voucher, a quiet view of the week will
+        gather here.
       </p>
     } @else {
-      @if (a.upcoming.length) {
-        <p class="mt-4">
-          {{ a.upcoming.length }} {{ a.upcoming.length === 1 ? 'subscription renews' : 'subscriptions renew' }}
-          in the next 7 days.
+      @if (v.subscriptions.count; as count) {
+        @if (v.subscriptions.upcoming.length) {
+          <p class="mt-4">
+            {{ v.subscriptions.upcoming.length }}
+            {{ v.subscriptions.upcoming.length === 1 ? 'subscription renews' : 'subscriptions renew' }} in the next 7 days.
+          </p>
+          <ul class="mt-4 space-y-2">
+            @for (sub of v.subscriptions.upcoming; track sub.id) {
+              <li class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-baseline gap-x-6 text-sm">
+                <span>{{ sub.name }}</span>
+                <span class="whitespace-nowrap text-ink-muted">{{ sub.nextRenewal | date: 'EEE d MMM' }}</span>
+                <span class="whitespace-nowrap text-right tabular-nums">{{ sub.amount | money }}</span>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="mt-4">Nothing renews in the next 7 days.</p>
+        }
+
+        <p class="mt-6 text-sm text-ink-muted">
+          Across {{ count }} {{ count === 1 ? 'subscription' : 'subscriptions' }}, that’s about
+          <span class="text-ink">{{ v.subscriptions.monthlyTotal | money }}</span> a month.
         </p>
-        <ul class="mt-4 space-y-2">
-          @for (sub of a.upcoming; track sub.id) {
-            <li class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-baseline gap-x-6 text-sm">
-              <span>{{ sub.name }}</span>
-              <span class="whitespace-nowrap text-ink-muted">{{ sub.nextRenewal | date: 'EEE d MMM' }}</span>
-              <span class="whitespace-nowrap text-right tabular-nums">{{ sub.amount | money }}</span>
-            </li>
-          }
-        </ul>
-      } @else {
-        <p class="mt-4">Nothing renews in the next 7 days.</p>
       }
 
-      <p class="mt-6 text-sm text-ink-muted">
-        Across {{ a.count }} {{ a.count === 1 ? 'subscription' : 'subscriptions' }}, that’s about
-        <span class="text-ink">{{ a.monthlyTotal | money }}</span> a month.
-      </p>
+      @if (v.expenses.count || v.vouchers.length) {
+        <div
+          class="space-y-2 text-sm text-ink-muted"
+          [class]="v.subscriptions.count ? 'mt-6 border-t border-ink/5 pt-6' : 'mt-4'"
+        >
+          @if (v.expenses.count; as count) {
+            <p>
+              In the past 7 days you noted {{ count }} {{ count === 1 ? 'expense' : 'expenses' }}, about
+              <span class="text-ink">{{ v.expenses.total | money }}</span>.
+            </p>
+          }
+          @if (v.vouchers.length === 1) {
+            <p>
+              <span class="text-ink">{{ v.vouchers[0].name }}</span> is good until
+              {{ v.vouchers[0].expiry | date: 'EEE d MMM' }}.
+            </p>
+          } @else if (v.vouchers.length > 1) {
+            <p>
+              {{ v.vouchers.length }} vouchers end within the next two weeks. The soonest is
+              <span class="text-ink">{{ v.vouchers[0].name }}</span>, good until
+              {{ v.vouchers[0].expiry | date: 'EEE d MMM' }}.
+            </p>
+          }
+        </div>
+      }
     }
   }
 
@@ -40,6 +69,6 @@
     routerLink="/subscriptions"
     class="hit mt-6 inline-block text-sm text-accent underline decoration-accent/30 underline-offset-4 transition-colors hover:decoration-accent"
   >
-    {{ awareness()?.count === 0 ? 'Add your first subscription' : 'View subscriptions' }}
+    {{ view()?.empty ? 'Add your first subscription' : 'View subscriptions' }}
   </a>
 </section>
