@@ -1,16 +1,9 @@
 import { Routes } from '@angular/router';
-import { About } from './about/about';
-import { Expenses } from './expenses/expenses';
-import { Guide } from './guide/guide';
-import { Home } from './home/home';
-import { Insights } from './insights/insights';
-import { Subscriptions } from './subscriptions/subscriptions';
-import { Vouchers } from './vouchers/vouchers';
 
 export const routes: Routes = [
   {
     path: '',
-    component: Home,
+    loadComponent: () => import('./home/home').then((m) => m.Home),
     title: 'Occurra · Quiet awareness for recurring money',
     data: {
       description:
@@ -19,7 +12,7 @@ export const routes: Routes = [
   },
   {
     path: 'subscriptions',
-    component: Subscriptions,
+    loadComponent: () => import('./subscriptions/subscriptions').then((m) => m.Subscriptions),
     title: 'Subscriptions · Occurra',
     data: {
       description:
@@ -28,7 +21,7 @@ export const routes: Routes = [
   },
   {
     path: 'expenses',
-    component: Expenses,
+    loadComponent: () => import('./expenses/expenses').then((m) => m.Expenses),
     title: 'Expenses · Occurra',
     data: {
       description:
@@ -37,7 +30,7 @@ export const routes: Routes = [
   },
   {
     path: 'vouchers',
-    component: Vouchers,
+    loadComponent: () => import('./vouchers/vouchers').then((m) => m.Vouchers),
     title: 'Vouchers · Occurra',
     data: {
       description:
@@ -46,7 +39,7 @@ export const routes: Routes = [
   },
   {
     path: 'insights',
-    component: Insights,
+    loadComponent: () => import('./insights/insights').then((m) => m.Insights),
     title: 'Your renewals · Occurra',
     data: {
       description:
@@ -55,7 +48,7 @@ export const routes: Routes = [
   },
   {
     path: 'about',
-    component: About,
+    loadComponent: () => import('./about/about').then((m) => m.About),
     title: 'About Occurra · A calm way to keep track of subscriptions',
     data: {
       description:
@@ -64,7 +57,7 @@ export const routes: Routes = [
   },
   {
     path: 'track-subscriptions',
-    component: Guide,
+    loadComponent: () => import('./guide/guide').then((m) => m.Guide),
     title: 'How to keep track of subscriptions, calmly · Occurra',
     data: {
       description:
