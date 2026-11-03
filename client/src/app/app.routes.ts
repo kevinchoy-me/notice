@@ -70,7 +70,7 @@ export const routes: Routes = [
     title: 'Privacy · Occurra',
     data: {
       description:
-        'Your lists stay in your browser and are never sent anywhere. No accounts, no analytics, no trackers, no cookies.',
+        'Your lists stay in your browser and are never sent anywhere. No accounts, no ads, no cookies, and only simple, anonymous visit counts.',
     },
   },
 ];
