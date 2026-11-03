@@ -76,15 +76,21 @@
   /* iOS Safari draws date inputs natively: wider than the card and a different height when empty.
      Only iOS matches this check, so desktop browsers keep their calendar icon. */
   @supports (-webkit-touch-callout: none) {
+    /* Without native styling iOS puts the date text at the top of the box; a line height equal to the
+       inner height (40px field minus its 1px top and bottom border) centres it like the text fields. */
     input[type='date'].field {
       -webkit-appearance: none;
       appearance: none;
       text-align: left;
+      padding-top: 0;
+      padding-bottom: 0;
+      line-height: calc(2.5rem - 2px);
     }
 
     input[type='date'].field::-webkit-date-and-time-value {
       margin: 0;
       text-align: left;
+      line-height: calc(2.5rem - 2px);
     }
   }
 
