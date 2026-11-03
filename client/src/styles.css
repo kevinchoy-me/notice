@@ -69,6 +69,23 @@
   .field {
     @apply mt-1 block h-10 w-full rounded-xl border border-line bg-canvas px-3 text-ink transition-colors focus-visible:border-accent;
     caret-color: var(--color-accent);
+    /* Lets date inputs shrink to their column; Safari gives them a native minimum width otherwise. */
+    min-width: 0;
+  }
+
+  /* iOS Safari draws date inputs natively: wider than the card and a different height when empty.
+     Only iOS matches this check, so desktop browsers keep their calendar icon. */
+  @supports (-webkit-touch-callout: none) {
+    input[type='date'].field {
+      -webkit-appearance: none;
+      appearance: none;
+      text-align: left;
+    }
+
+    input[type='date'].field::-webkit-date-and-time-value {
+      margin: 0;
+      text-align: left;
+    }
   }
 
   /* Widens a small text control's tap area to 44px tall without moving the layout. */
