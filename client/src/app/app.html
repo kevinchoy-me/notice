@@ -4,14 +4,20 @@
     <p class="text-sm text-ink-muted">Quiet awareness for recurring money</p>
   </header>
 
-  <nav class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm" aria-label="Main">
+  <!-- Phones: one evenly spaced line (12.5px text, 13px from 390px wide); justify-between sets the spacing.
+       From sm up: the roomier 14px row with fixed gaps. flex-wrap stays only as a fallback, so the narrowest
+       screens (about 320px) wrap instead of cutting a link off. -->
+  <nav
+    class="mt-8 flex flex-wrap justify-between gap-y-2 text-[12.5px] min-[390px]:text-[13px] sm:justify-start sm:gap-x-6 sm:text-sm"
+    aria-label="Main"
+  >
     @for (link of links; track link.path) {
       <a
         [routerLink]="link.path"
         routerLinkActive
         [routerLinkActiveOptions]="{ exact: true }"
         ariaCurrentWhenActive="page"
-        class="hit text-ink-muted transition-colors hover:text-ink aria-[current=page]:text-accent-strong"
+        class="hit whitespace-nowrap text-ink-muted transition-colors hover:text-ink aria-[current=page]:text-accent-strong"
         >{{ link.label }}</a
       >
     }
