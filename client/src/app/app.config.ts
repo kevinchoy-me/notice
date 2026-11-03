@@ -1,6 +1,6 @@
 import { ApplicationConfig, isDevMode, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideClientHydration } from '@angular/platform-browser';
-import { TitleStrategy, provideRouter } from '@angular/router';
+import { TitleStrategy, provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { routes } from './app.routes';
 import { PageTitleStrategy } from './core/seo';
@@ -8,7 +8,8 @@ import { PageTitleStrategy } from './core/seo';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
+    // New pages open at the top; Back and Forward return to where you were.
+    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })),
     provideClientHydration(),
     { provide: TitleStrategy, useClass: PageTitleStrategy },
     // Offline support for production builds. Registers once the app is idle (or after 30s),
