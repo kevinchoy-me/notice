@@ -8,8 +8,9 @@ import { PageTitleStrategy } from './core/seo';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    // New pages open at the top; Back and Forward return to where you were.
-    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })),
+    // The router reports scroll positions; CalmScrolling (core/scroll.ts) does the scrolling:
+    // a smooth glide to the top for new pages, an instant return on Back and Forward.
+    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'disabled' })),
     provideClientHydration(),
     { provide: TitleStrategy, useClass: PageTitleStrategy },
     // Offline support for production builds. Registers once the app is idle (or after 30s),
