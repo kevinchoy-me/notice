@@ -64,4 +64,13 @@ export const routes: Routes = [
         'A simple, calm way to keep track of subscriptions: one list, the next renewal date, a monthly total and a weekly glance. No budgets, no judgment.',
     },
   },
+  {
+    path: 'privacy',
+    loadComponent: () => import('./privacy/privacy').then((m) => m.Privacy),
+    title: 'Privacy · Occurra',
+    data: {
+      description:
+        'Your lists stay in your browser and are never sent anywhere. No accounts, no analytics, no trackers, no cookies.',
+    },
+  },
 ];
