@@ -27,6 +27,7 @@ export class App {
   protected readonly footerLinks = [
     { path: '/about', label: 'About Occurra' },
     { path: '/track-subscriptions', label: 'Keeping track of subscriptions' },
+    { path: '/track-gift-cards', label: 'Keeping track of gift cards' },
     { path: '/privacy', label: 'Privacy' },
   ];
 }
