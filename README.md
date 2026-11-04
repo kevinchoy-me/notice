@@ -35,3 +35,8 @@ npm start
 - The mark is a sage (`#5B7C6E`) chevron on warm off-white (`#F9F8F6`). It's a clean SVG recreation from the chosen logo's description, not the original artwork; replace both SVGs if the original file becomes available.
 - Sources: `client/public/icons/logo.svg` (app icons, kept inside the maskable safe zone) and `client/public/favicon.svg` (tighter crop for browser tabs).
 - Exported files: `favicon.ico` (16, 32, 48), `icons/icon-192.png`, `icons/icon-512.png`, `icons/icon-maskable-512.png`, `icons/apple-touch-icon.png` (180). Re-export all of them if the SVGs change.
+
+## Optional tip note
+
+- A quiet "If Occurra has been useful, a small tip is welcome. Leave a tip" line sits at the bottom of Insights, with a matching "Tips" section on the privacy page.
+- Both are hidden until `TIP_URL` in `client/src/app/core/support.ts` is set to a real tip page (e.g. Ko-fi, Buy Me a Coffee, Stripe Payment Link), so no placeholder link ever goes live.
