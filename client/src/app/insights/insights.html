@@ -1,39 +1,72 @@
-<section class="card">
-  <h1 class="text-xl font-light">Your renewals</h1>
+<div class="space-y-8">
+  <section class="card">
+    <h1 class="text-xl font-light">Your renewals</h1>
 
-  @if (loadFailed()) {
-    <p class="mt-4 text-ink-muted" role="status">
-      Your subscriptions couldn’t be opened in this browser. Private browsing or blocked site data are the usual cause.
-    </p>
-  } @else if (subscriptions(); as subs) {
-    @if (subs.length === 0) {
-      <p class="mt-4 text-ink-muted">Nothing to look at yet. Renewals will line up here once you add a subscription.</p>
-    } @else {
-      <p class="mt-4 text-sm text-ink-muted">
-        Together, about <span class="text-ink">{{ monthlyTotal() | money }}</span> a month.
+    @if (loadFailed()) {
+      <p class="mt-4 text-ink-muted" role="status">
+        Your subscriptions couldn’t be opened in this browser. Private browsing or blocked site data are the usual cause.
       </p>
+    } @else if (subscriptions(); as subs) {
+      @if (subs.length === 0) {
+        <p class="mt-4 text-ink-muted">Nothing to look at yet. Renewals will line up here once you add a subscription.</p>
+      } @else {
+        <p class="mt-4 text-sm text-ink-muted">
+          Together, about <span class="text-ink">{{ monthlyTotal() | money }}</span> a month.
+        </p>
 
-      <ul class="mt-6 divide-y divide-ink/5">
-        @for (sub of subs; track sub.id) {
-          <li class="flex items-baseline justify-between gap-4 py-4">
-            <div>
-              <p>{{ sub.name }}</p>
-              <p class="mt-1 text-sm text-ink-muted">Renews {{ sub.nextRenewal | date: 'd MMM y' }}</p>
-            </div>
-            <p class="whitespace-nowrap text-ink-muted">
-              <span class="text-ink tabular-nums">{{ sub.amount | money }}</span>
-              / {{ sub.cycle === 'monthly' ? 'month' : 'year' }}
-            </p>
-          </li>
-        }
-      </ul>
+        <ul class="mt-6 divide-y divide-ink/5">
+          @for (sub of subs; track sub.id) {
+            <li class="flex items-baseline justify-between gap-4 py-4">
+              <div>
+                <p>{{ sub.name }}</p>
+                <p class="mt-1 text-sm text-ink-muted">Renews {{ sub.nextRenewal | date: 'd MMM y' }}</p>
+              </div>
+              <p class="whitespace-nowrap text-ink-muted">
+                <span class="text-ink tabular-nums">{{ sub.amount | money }}</span>
+                / {{ sub.cycle === 'monthly' ? 'month' : 'year' }}
+              </p>
+            </li>
+          }
+        </ul>
+      }
     }
-  }
 
-  <a
-    routerLink="/subscriptions"
-    class="hit mt-6 inline-block text-sm text-accent underline decoration-accent/30 underline-offset-4 transition-colors hover:decoration-accent"
-  >
-    {{ subscriptions()?.length === 0 ? 'Add your first subscription' : 'View subscriptions' }}
-  </a>
-</section>
+    <a
+      routerLink="/subscriptions"
+      class="hit mt-6 inline-block text-sm text-accent underline decoration-accent/30 underline-offset-4 transition-colors hover:decoration-accent"
+    >
+      {{ subscriptions()?.length === 0 ? 'Add your first subscription' : 'View subscriptions' }}
+    </a>
+  </section>
+
+  @if (device(); as d) {
+    <section class="card">
+      <h2 class="text-lg font-light">On this device</h2>
+      @if (d.subscriptions + d.expenses + d.vouchers === 0) {
+        <p class="mt-4 text-ink-muted">Nothing saved yet. Whatever you add will stay here, on this device.</p>
+      } @else {
+        <p class="mt-4 text-ink-muted">
+          {{ countOf(d.subscriptions, 'subscription') }}, {{ countOf(d.expenses, 'expense') }} and
+          {{ countOf(d.vouchers, 'voucher') }}, all kept on this device.
+        </p>
+      }
+      @if (d.lastOpened; as last) {
+        <p class="mt-2 text-sm text-ink-muted">
+          @switch (last.when) {
+            @case ('today') {
+              You last opened Occurra earlier today.
+            }
+            @case ('yesterday') {
+              You last opened Occurra yesterday.
+            }
+            @default {
+              @if (last.when === 'date') {
+                You last opened Occurra on {{ last.date | date: 'EEE d MMM' }}.
+              }
+            }
+          }
+        </p>
+      }
+    </section>
+  }
+</div>
