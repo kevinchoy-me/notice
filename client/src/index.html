@@ -11,8 +11,38 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <meta name="theme-color" content="#f9f8f6">
+  <!-- Launch screen for the installed app only (display-mode: standalone). Pure CSS: the mark fades in,
+       then the screen fades out after about a second, so it can never get stuck. Browsers and crawlers
+       never see it, and "reduce motion" skips the animation. -->
+  <style>
+    #launch { display: none; }
+    @media (display-mode: standalone) {
+      #launch {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f9f8f6;
+        animation: launch-out 350ms ease-out 750ms forwards;
+      }
+      #launch svg { animation: launch-in 600ms ease-out both; }
+    }
+    @media (display-mode: standalone) and (prefers-reduced-motion: reduce) {
+      #launch { animation-duration: 1ms; animation-delay: 150ms; }
+      #launch svg { animation: none; }
+    }
+    @keyframes launch-in { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
+    @keyframes launch-out { to { opacity: 0; visibility: hidden; } }
+  </style>
 </head>
 <body>
+  <div id="launch" aria-hidden="true">
+    <svg width="72" height="72" viewBox="0 0 64 64">
+      <path d="M12 44 L32 20 L52 44" fill="none" stroke="#5B7C6E" stroke-width="10" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10"/>
+    </svg>
+  </div>
   <app-root></app-root>
 </body>
 </html>
