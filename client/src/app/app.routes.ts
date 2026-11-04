@@ -65,6 +65,15 @@ export const routes: Routes = [
     },
   },
   {
+    path: 'track-gift-cards',
+    loadComponent: () => import('./gift-cards/gift-cards').then((m) => m.GiftCards),
+    title: 'How to keep track of gift cards and vouchers · Occurra',
+    data: {
+      description:
+        'A calm way to keep gift cards and vouchers in one place, with expiry dates in view, so they get used. Private: everything stays on your device.',
+    },
+  },
+  {
     path: 'privacy',
     loadComponent: () => import('./privacy/privacy').then((m) => m.Privacy),
     title: 'Privacy · Occurra',
