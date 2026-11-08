@@ -21,3 +21,6 @@ out-tsc/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Hallmark audit/redesign records and screenshots (local only)
+.hallmark/
