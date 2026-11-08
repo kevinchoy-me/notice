@@ -77,7 +77,8 @@
     </aside>
   }
 
-  <main class="mt-12 flex-1">
+  <!-- 48px below the nav normally; 32px below the install banner, matching the gap between cards. -->
+  <main class="flex-1" [class.mt-8]="!!install.method()" [class.mt-12]="!install.method()">
     <router-outlet />
   </main>
 
