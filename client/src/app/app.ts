@@ -1,7 +1,8 @@
 import { Component, afterNextRender, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { InstallOffer } from './core/install';
 import { CalmScrolling } from './core/scroll';
-import { recordOpen } from './core/visits';
+import { previousOpen, recordOpen } from './core/visits';
 
 @Component({
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
@@ -10,10 +11,16 @@ import { recordOpen } from './core/visits';
   templateUrl: './app.html',
 })
 export class App {
+  protected readonly install = inject(InstallOffer);
+
   constructor() {
     inject(CalmScrolling).start();
-    // Note this visit as "last opened" (localStorage, this device only) once per app load.
-    afterNextRender(() => recordOpen());
+    afterNextRender(() => {
+      // Note this visit as "last opened" (localStorage, this device only) once per app load.
+      recordOpen();
+      // Offer installing from the second visit on, so it never stacks with the first-visit welcome.
+      if (previousOpen()) this.install.start();
+    });
   }
 
   protected readonly links = [

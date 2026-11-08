@@ -23,6 +23,60 @@
     }
   </nav>
 
+  @if (install.method(); as method) {
+    <aside
+      class="card mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 !py-4"
+      aria-label="Install Occurra"
+    >
+      @if (method === 'prompt') {
+        <p class="min-w-0 flex-1 text-sm text-ink-muted">
+          Add Occurra to this device to open it like an app, even offline.
+        </p>
+        <div class="flex items-center gap-4">
+          <button
+            type="button"
+            class="rounded-full border border-accent/30 px-4 py-1.5 text-sm text-accent transition-colors hover:bg-accent/5"
+            (click)="install.install()"
+          >
+            Install
+          </button>
+          <button
+            type="button"
+            class="hit text-sm text-ink-muted transition-colors hover:text-ink"
+            (click)="install.dismiss()"
+          >
+            Not now
+          </button>
+        </div>
+      } @else {
+        <p class="min-w-0 flex-1 text-sm text-ink-muted">
+          To add Occurra to your Home Screen, tap
+          <svg
+            class="inline-block h-4 w-4 -translate-y-px align-middle text-accent"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            role="img"
+            aria-label="Share"
+          >
+            <path d="M12 3v12M8 7l4-4 4 4M6 11H5v10h14V11h-1" />
+          </svg>
+          Share, then <span class="text-ink">Add to Home Screen</span>.
+        </p>
+        <button
+          type="button"
+          class="hit text-sm text-ink-muted transition-colors hover:text-ink"
+          (click)="install.dismiss()"
+        >
+          Not now
+        </button>
+      }
+    </aside>
+  }
+
   <main class="mt-12 flex-1">
     <router-outlet />
   </main>

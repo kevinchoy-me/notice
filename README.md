@@ -40,3 +40,11 @@ npm start
 
 - A quiet "If Occurra has been useful, a small tip is welcome. Leave a tip" line sits at the bottom of Insights, with a matching "Tips" section on the privacy page.
 - Both are hidden until `TIP_URL` in `client/src/app/core/support.ts` is set to a real tip page (e.g. Ko-fi, Buy Me a Coffee, Stripe Payment Link), so no placeholder link ever goes live.
+
+## Install banner
+
+- A small banner under the menu offers installing Occurra, from the second visit on (so it never stacks with the first-visit welcome).
+- Chrome, Edge and Samsung Internet show an Install button that opens the browser's own dialog. The browser's install event is caught early by a small script in `client/src/index.html` and used by `client/src/app/core/install.ts`.
+- iPhone and iPad Safari show "tap Share, then Add to Home Screen" instead, since Safari has no install button for sites.
+- Hidden when Occurra is already running as the installed app, and in browsers with no install option (e.g. Firefox desktop).
+- "Not now", or declining the browser's dialog, hides it for 30 days (`INSTALL_SNOOZE_DAYS`), stored in this browser only.
