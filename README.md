@@ -38,7 +38,7 @@ npm start
 
 ## Optional tip note
 
-- A quiet "If Occurra has been useful, a small tip is welcome. Leave a tip" line sits at the bottom of Insights, with a matching "Tips" section on the privacy page.
+- A quiet "If Occurra has been useful, a small tip is welcome. Leave a tip" line sits in the footer of every page, with a matching "Tips" section on the privacy page.
 - Both are hidden until `TIP_URL` in `client/src/app/core/support.ts` is set to a real tip page (e.g. Ko-fi, Buy Me a Coffee, Stripe Payment Link), so no placeholder link ever goes live.
 
 ## Install banner
