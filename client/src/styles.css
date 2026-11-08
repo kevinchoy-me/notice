@@ -1,7 +1,9 @@
-/* Hallmark · checked: 2026-10-31 · genre: editorial (inferred) · shape: app screen · surface: absolute
- * floor: 0 FAIL · fixed: 26a, 34, 40, 48, 26b, 39a, 39b, 63, F1, F16, F23, load error states · structural: none
+/* Hallmark · checked: 2026-11-08 · genre: editorial (inferred) · shape: app screen · surface: absolute
+ * floor: 0 FAIL on the app screens · fixed: 67 (welcome step label), 48 (launch tokens), F26 (balanced heads), F15 (banner gap)
+ * structural: 58, 77, 78, 9 on the public pages (/about, /track-subscriptions, /track-gift-cards, /privacy) need a full redesign; owner deferred
  * built: the project · redesign: polish · v2.0.0 */
 /* Hallmark · waive 7b · surface: absolute in the stamp, card text passes 40 and 41 · white #FFFFFF cards on the #F9F8F6 canvas are the Soft Minimal surface spec for Occurra */
+/* Hallmark · waive 39b · app UI text buttons with .hit expanding the tap target to 44px · "Not now", Edit and Remove are quiet controls in app chrome, including the install banner on every route */
 
 @tailwind base;
 @tailwind components;
@@ -37,6 +39,13 @@
   body {
     background-color: var(--color-canvas);
     color: var(--color-ink);
+  }
+
+  /* Balanced heading lines, so no heading ends on a one-word stub on phones. */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
   }
 
   ::selection {
