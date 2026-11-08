@@ -1,6 +1,7 @@
 import { Component, afterNextRender, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { InstallOffer } from './core/install';
+import { TIP_URL } from './core/support';
 import { CalmScrolling } from './core/scroll';
 import { previousOpen, recordOpen } from './core/visits';
 
@@ -30,6 +31,9 @@ export class App {
     { path: '/vouchers', label: 'Vouchers' },
     { path: '/insights', label: 'Insights' },
   ];
+
+  /** Optional tip link shown in the footer; hidden while it's empty. */
+  protected readonly tipUrl = TIP_URL;
 
   protected readonly footerLinks = [
     { path: '/about', label: 'About Occurra' },

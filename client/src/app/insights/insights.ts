@@ -6,7 +6,6 @@ import { Subscription, db } from '../core/db';
 import { loadSubscriptions } from '../core/renewals';
 import { LastOpened, countOf, describeLastOpened, previousOpen } from '../core/visits';
 import { monthlyTotal } from '../home/awareness';
-import { TIP_URL } from '../core/support';
 
 interface OnThisDevice {
   subscriptions: number;
@@ -27,8 +26,6 @@ export class Insights {
   /** Counts and last-opened, read from this device only. Nothing here is sent anywhere. */
   protected readonly device = signal<OnThisDevice | null>(null);
   protected readonly countOf = countOf;
-  /** Optional tip link; the note is hidden while it's empty. */
-  protected readonly tipUrl = TIP_URL;
 
   constructor() {
     // IndexedDB and localStorage only exist in the browser, so never read during prerender.

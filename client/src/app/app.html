@@ -82,15 +82,30 @@
     <router-outlet />
   </main>
 
-  <footer class="mt-16 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-    @for (link of footerLinks; track link.path) {
-      <a
-        [routerLink]="link.path"
-        routerLinkActive
-        ariaCurrentWhenActive="page"
-        class="hit text-ink-muted transition-colors hover:text-ink aria-[current=page]:text-accent-strong"
-        >{{ link.label }}</a
-      >
+  <footer class="mt-16 space-y-4 text-sm">
+    <div class="flex flex-wrap gap-x-6 gap-y-2">
+      @for (link of footerLinks; track link.path) {
+        <a
+          [routerLink]="link.path"
+          routerLinkActive
+          ariaCurrentWhenActive="page"
+          class="hit text-ink-muted transition-colors hover:text-ink aria-[current=page]:text-accent-strong"
+          >{{ link.label }}</a
+        >
+      }
+    </div>
+    <!-- Optional, quiet tip note on every page. Static, so it is in the prerendered HTML; hidden until TIP_URL is set. -->
+    @if (tipUrl) {
+      <p class="text-ink-muted">
+        If Occurra has been useful, a small tip is welcome.
+        <a
+          [href]="tipUrl"
+          target="_blank"
+          rel="noopener"
+          class="hit whitespace-nowrap underline decoration-ink/20 underline-offset-4 transition-colors hover:text-ink hover:decoration-ink/50"
+          >Leave a tip</a
+        >
+      </p>
     }
   </footer>
 </div>
