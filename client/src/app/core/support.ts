@@ -3,4 +3,4 @@
  * While this is empty, the tip note is hidden everywhere, so a placeholder or dead link never ships.
  * Set it to the full https:// URL to show the note on Insights and the matching line on the privacy page.
  */
-export const TIP_URL = '';
+export const TIP_URL = 'https://ko-fi.com/occurra';
